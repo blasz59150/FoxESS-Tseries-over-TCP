@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to FoxESS gateway",
+        "description": "Enter the local TCP gateway address and port. Project and documentation: https://github.com/blasz59150/foxess-tseries-over-tcp.",
+        "data": {
+          "host": "Gateway IP address",
+          "port": "TCP port"
+        }
+      }
+    },
+    "error": {
+      "required": "This field is required."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "TCP and availability options",
+        "description": "Adjust reconnect timing without editing integration files. Project and documentation: https://github.com/blasz59150/foxess-tseries-over-tcp.",
+        "data": {
+          "no_data_timeout": "Seconds without TCP data before reconnecting",
+          "reconnect_delay": "Seconds between reconnect attempts",
+          "offline_after": "Seconds without valid telemetry before OFFLINE"
+        }
+      }
+    }
+  }
+}
