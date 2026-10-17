@@ -1,0 +1,124 @@
+# Import this dashboard in Home Assistant: Settings > Dashboards > Add dashboard > YAML mode.
+# Entity IDs can differ if your existing entity registry uses custom IDs; adjust as needed.
+title: FoxessTCP
+views:
+  - title: FoxESS
+    path: foxess-tcp
+    icon: mdi:solar-power-variant
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: binary_sensor.garaz_foxess_t4_g3_online
+            name: Status falownika
+          - type: tile
+            entity: sensor.foxess_t4_g3_inverter_output_power
+            name: Moc falownika
+          - type: tile
+            entity: sensor.foxess_t4_g3_feed_in_power
+            name: Oddawanie do sieci
+          - type: tile
+            entity: sensor.foxess_t4_g3_load_power
+            name: Moc obciążenia
+          - type: tile
+            entity: sensor.foxess_t4_g3_energy_today
+            name: Produkcja dzisiaj
+          - type: tile
+            entity: sensor.foxess_t4_g3_energy_total
+            name: Produkcja całkowita
+      - type: statistics-graph
+        title: Produkcja energii godzinowa
+        chart_type: bar
+        period: hour
+        days_to_show: 1
+        stat_types:
+          - change
+        entities:
+          - entity: sensor.foxess_t4_g3_energy_today
+            name: Produkcja (kWh)
+      - type: history-graph
+        title: Moc falownika — ostatnie 24 godziny
+        hours_to_show: 24
+        refresh_interval: 60
+        entities:
+          - entity: sensor.foxess_t4_g3_inverter_output_power
+            name: Moc (W)
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: entities
+            title: Sieć — faza R/L1
+            entities:
+              - sensor.foxess_t4_g3_grid_voltage_r
+              - sensor.foxess_t4_g3_grid_current_r
+              - sensor.foxess_t4_g3_grid_frequency_r
+              - sensor.foxess_t4_g3_grid_power_r
+          - type: entities
+            title: Sieć — faza S/L2
+            entities:
+              - sensor.foxess_t4_g3_grid_voltage_s
+              - sensor.foxess_t4_g3_grid_current_s
+              - sensor.foxess_t4_g3_grid_frequency_s
+              - sensor.foxess_t4_g3_grid_power_s
+          - type: entities
+            title: Sieć — faza T/L3
+            entities:
+              - sensor.foxess_t4_g3_grid_voltage_t
+              - sensor.foxess_t4_g3_grid_current_t
+              - sensor.foxess_t4_g3_grid_frequency_t
+              - sensor.foxess_t4_g3_grid_power_t
+          - type: entities
+            title: Temperatury
+            entities:
+              - sensor.foxess_t4_g3_inverter_temperature
+              - sensor.foxess_t4_g3_ambient_temperature
+              - sensor.foxess_t4_g3_boost_temperature
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: entities
+            title: String PV1
+            entities:
+              - sensor.foxess_t4_g3_pv1_voltage
+              - sensor.foxess_t4_g3_pv1_current
+          - type: entities
+            title: String PV2
+            entities:
+              - sensor.foxess_t4_g3_pv2_voltage
+              - sensor.foxess_t4_g3_pv2_current
+          - type: entities
+            title: String PV3
+            entities:
+              - sensor.foxess_t4_g3_pv3_voltage
+              - sensor.foxess_t4_g3_pv3_current
+          - type: entities
+            title: String PV4
+            entities:
+              - sensor.foxess_t4_g3_pv4_voltage
+              - sensor.foxess_t4_g3_pv4_current
+      - type: entities
+        title: Konsola diagnostyczna TCP
+        show_header_toggle: false
+        entities:
+          - entity: sensor.foxess_t4_g3_tcp_diagnostics
+            name: Stan połączenia i dziennik zdarzeń
+          - entity: sensor.foxess_t4_g3_last_tcp_packet
+            name: Ostatni pakiet TCP
+          - entity: sensor.foxess_t4_g3_last_valid_frame
+            name: Ostatnia poprawna ramka
+      - type: markdown
+        title: Ostatnie zdarzenia TCP
+        content: >-
+          {% set diag = states.sensor.foxess_t4_g3_tcp_diagnostics %}
+          {% set events = state_attr('sensor.foxess_t4_g3_tcp_diagnostics', 'recent_events') or [] %}
+          {% if events %}
+          {% for event in events | reverse %}
+          - **{{ event.time }}** — {{ event.message }}
+          {% endfor %}
+          {% else %}
+          Brak zarejestrowanych zdarzeń.
+          {% endif %}
