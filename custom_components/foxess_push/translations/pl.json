@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Połącz z bramką FoxESS",
+        "description": "Podaj lokalny adres i port TCP bramki. Projekt i dokumentacja: https://github.com/blasz59150/foxess-tseries-over-tcp.",
+        "data": {
+          "host": "Adres IP bramki",
+          "port": "Port TCP"
+        }
+      }
+    },
+    "error": {
+      "required": "To pole jest wymagane."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje TCP i dostępności",
+        "description": "Zmieniaj czasy ponawiania połączenia bez edycji plików integracji. Projekt i dokumentacja: https://github.com/blasz59150/foxess-tseries-over-tcp.",
+        "data": {
+          "no_data_timeout": "Sekundy bez danych TCP przed ponownym połączeniem",
+          "reconnect_delay": "Sekundy między próbami połączenia",
+          "offline_after": "Sekundy bez poprawnej telemetrii przed statusem OFFLINE"
+        }
+      }
+    }
+  }
+}
